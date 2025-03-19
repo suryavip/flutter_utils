@@ -1,6 +1,6 @@
 /*
 https://github.com/suryavip/flutter_utils
-version: 1
+version: 2
 */
 
 import 'package:flutter/material.dart';
@@ -17,8 +17,8 @@ extension HexColor on Color {
   /// Prefixes a hash sign if [leadingHashSign] is set to `true` (default is `true`).
   String toHex({bool leadingHashSign = true}) =>
       '${leadingHashSign ? '#' : ''}'
-      '${alpha.toRadixString(16).padLeft(2, '0')}'
-      '${red.toRadixString(16).padLeft(2, '0')}'
-      '${green.toRadixString(16).padLeft(2, '0')}'
-      '${blue.toRadixString(16).padLeft(2, '0')}';
+      '${((0xff000000 & toARGB32()) >> 24).toRadixString(16).padLeft(2, '0')}'
+      '${((0x00ff0000 & toARGB32()) >> 16).toRadixString(16).padLeft(2, '0')}'
+      '${((0x0000ff00 & toARGB32()) >> 8).toRadixString(16).padLeft(2, '0')}'
+      '${((0x000000ff & toARGB32()) >> 0).toRadixString(16).padLeft(2, '0')}';
 }

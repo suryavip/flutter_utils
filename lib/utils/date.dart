@@ -1,11 +1,7 @@
 /*
 https://github.com/suryavip/flutter_utils
-version: 3
+version: 4
 */
-
-import 'package:intl/intl.dart';
-
-const _firstDayOfTheWeek = DateTime.monday;
 
 class Date implements Comparable<Date> {
   final DateTime dateTime;
@@ -30,7 +26,8 @@ class Date implements Comparable<Date> {
   int get hashCode => dateTime.zeroTime.hashCode;
 
   @override
-  String toString() => DateFormat('yyyy-MM-dd').format(dateTime);
+  String toString() =>
+      '${dateTime.year.toString().padLeft(4, '0')}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
 
   operator >=(other) =>
       other is Date &&
@@ -65,27 +62,29 @@ extension ZeroTime on DateTime {
   /// Returns the same date but at 0 [hour], [minute], [second], ...
   DateTime get zeroTime => DateTime(year, month, day);
 
-  /// Subtract 1 day until [weekday] matched with [_firstDayOfTheWeek].
+  /// Subtract 1 day until [weekday] matched with [firstDayOfTheWeek].
   ///
   /// Example: current [day] is 29 and current [weekday] is [DateTime.tuesday].
   /// If [kFirstDayOfTheWeek] is [DateTime.monday] then will return previous day ([day] is 28 and [weekday] is [DateTime.monday]).
-  DateTime get previousFirstDayOfTheWeek {
+  DateTime previousFirstDayOfTheWeek({
+    int firstDayOfTheWeek = DateTime.monday,
+  }) {
     DateTime start = this;
-    while (start.weekday != _firstDayOfTheWeek) {
+    while (start.weekday != firstDayOfTheWeek) {
       start = start.subtract(const Duration(days: 1));
     }
     return start;
   }
 
-  /// Add 1 day until [weekday] matched with [_firstDayOfTheWeek] - 1 day.
+  /// Add 1 day until [weekday] matched with [firstDayOfTheWeek] - 1 day.
   ///
   /// Example: current [day] is 2 and current [weekday] is [DateTime.friday].
   /// If [kFirstDayOfTheWeek] is [DateTime.monday] then will return :([day] : 4 and [weekday] is [DateTime.sunday]).
-  DateTime get nextLastDayOfTheWeek {
+  DateTime nextLastDayOfTheWeek({int firstDayOfTheWeek = DateTime.monday}) {
     DateTime start = this;
     do {
       start = start.add(const Duration(days: 1));
-    } while (start.weekday != _firstDayOfTheWeek);
+    } while (start.weekday != firstDayOfTheWeek);
     return start.subtract(const Duration(days: 1));
   }
 }
